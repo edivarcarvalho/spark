@@ -1679,10 +1679,15 @@ class Dataset[T] private[sql](
    * @since 2.0.0
    */
   @scala.annotation.varargs
+  def groupBy(cols: String*): RelationalGroupedDataset = {
+    RelationalGroupedDataset(
+      toDF(), cols.map(col => resolve(col)), RelationalGroupedDataset.GroupByType)
+  }
+    
+  @scala.annotation.varargs
   def groupBy(col1: String, cols: String*): RelationalGroupedDataset = {
     val colNames: Seq[String] = col1 +: cols
-    RelationalGroupedDataset(
-      toDF(), colNames.map(colName => resolve(colName)), RelationalGroupedDataset.GroupByType)
+    groupBy(colNames)
   }
 
   /**
